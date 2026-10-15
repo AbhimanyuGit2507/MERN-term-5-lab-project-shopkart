@@ -9,5 +9,6 @@ router.post("/create-payment-order", orderController.createPaymentOrder);
 router.post("/verify-payment", orderController.verifyPayment);
 router.get("/", orderController.getOrders);
 router.get("/:id", orderController.getOrderById);
+router.patch("/:id/status", orderController.updateOrderStatus);
 
 module.exports = router;

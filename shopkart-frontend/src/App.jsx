@@ -10,6 +10,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
 import OrderSuccess from './pages/OrderSuccess';
+import { CartProvider } from './context/CartContext';
 import api from './services/api';
 
 function App() {
@@ -39,26 +40,28 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <div className="min-h-screen bg-gray-50 flex flex-col">
-        <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<Navigate to="/home" />} />
-            <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/home" element={<Home setIsAuthenticated={setIsAuthenticated} />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/order-success/:id" element={<OrderSuccess />} />
-            <Route path="*" element={<Navigate to="/login" />} />
-          </Routes>
-        </main>
-      </div>
-    </BrowserRouter>
+    <CartProvider isAuthenticated={isAuthenticated}>
+      <BrowserRouter>
+        <div className="min-h-screen bg-gray-50 flex flex-col">
+          <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+          <main className="flex-1">
+            <Routes>
+              <Route path="/" element={<Navigate to="/home" />} />
+              <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/home" element={<Home setIsAuthenticated={setIsAuthenticated} />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/wishlist" element={<Wishlist />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/order-success/:id" element={<OrderSuccess />} />
+              <Route path="*" element={<Navigate to="/login" />} />
+            </Routes>
+          </main>
+        </div>
+      </BrowserRouter>
+    </CartProvider>
   );
 }
 

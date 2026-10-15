@@ -2,16 +2,19 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { ShoppingCart, LogOut } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 
 export default function Navbar({ isAuthenticated, setIsAuthenticated }) {
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+  const { cartCount, setCart } = useCart();
 
   const handleLogout = async () => {
     try {
       setLoading(true);
       await api.post('/customers/logout');
       setIsAuthenticated(false);
+      setCart([]);
       navigate('/login');
     } catch (error) {
       console.error('Logout failed:', error);
@@ -21,7 +24,7 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated }) {
   };
 
   return (
-    <nav className="bg-white shadow-sm border-b px-6 py-4 flex justify-between items-center">
+    <nav className="bg-white shadow-sm border-b px-6 py-4 flex justify-between items-center sticky top-0 z-40">
       <Link to="/" className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700 transition">
         <ShoppingCart size={24} />
         <span className="font-bold text-xl tracking-tight">ShopKart</span>
@@ -33,7 +36,19 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated }) {
             <Link to="/home" className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition">Home</Link>
             <Link to="/products" className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition">Products</Link>
             <Link to="/wishlist" className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition">Wishlist</Link>
-            <Link to="/cart" className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition">Cart</Link>
+            
+            <Link 
+              to="/cart" 
+              className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition flex items-center gap-1.5"
+            >
+              <span>Cart</span>
+              <span className={`text-xs px-2 py-0.5 rounded-full font-bold transition-all ${
+                cartCount > 0 ? 'bg-indigo-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600'
+              }`}>
+                ({cartCount})
+              </span>
+            </Link>
+
             <Link to="/orders" className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition">My Orders</Link>
             <button
               onClick={handleLogout}
